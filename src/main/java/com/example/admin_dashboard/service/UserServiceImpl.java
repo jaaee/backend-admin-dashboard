@@ -76,6 +76,15 @@ public class UserServiceImpl implements UserService {
 
         return UserLoginMapper.toResponse(user);
     }
+
+
+    @Override
+    public long getActiveUsersCount() {
+
+        return userRepository.countActiveUsers(
+
+        );
+    }
     }
 
 

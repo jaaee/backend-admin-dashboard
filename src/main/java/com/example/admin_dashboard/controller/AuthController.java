@@ -2,14 +2,13 @@ package com.example.admin_dashboard.controller;
 
 import com.example.admin_dashboard.dto.request.LoginRequest;
 import com.example.admin_dashboard.dto.response.LoginResponse;
-import com.example.admin_dashboard.dto.response.UserResponse;
 import com.example.admin_dashboard.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
 
     @Autowired
@@ -17,6 +16,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest request) {
+
         return userService.login(request);
     }
 

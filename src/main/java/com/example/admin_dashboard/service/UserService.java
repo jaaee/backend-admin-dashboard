@@ -18,5 +18,7 @@ public interface UserService {
     UserResponse updateUser(Long id, UserRequest request);
 
     LoginResponse login(LoginRequest request);
+
+      long getActiveUsersCount();
 }
 

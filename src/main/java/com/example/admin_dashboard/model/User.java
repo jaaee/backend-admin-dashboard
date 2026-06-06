@@ -45,6 +45,9 @@ public class User {
     @Column(name="UpdatedDate")
     private LocalDateTime updatedDate;
 
+    @Column(name = "session_active")
+    private Boolean sessionActive;
+
 
 
 
