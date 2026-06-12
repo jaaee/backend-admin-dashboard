@@ -2,6 +2,7 @@ package com.example.admin_dashboard.service;
 
 import com.example.admin_dashboard.dto.request.LoginRequest;
 import com.example.admin_dashboard.dto.response.LoginResponse;
+import com.example.admin_dashboard.exception.AuthenticationException;
 import com.example.admin_dashboard.mapper.UserLoginMapper;
 import com.example.admin_dashboard.mapper.UserMapper;
 import com.example.admin_dashboard.model.User;
@@ -62,6 +63,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public LoginResponse login(LoginRequest request) {
 
+
         Optional<User> optionalUser =
                 userRepository.findByUserNameAndPassword(
                         request.getUserName(),
@@ -69,7 +71,7 @@ public class UserServiceImpl implements UserService {
                 );
 
         if (optionalUser.isEmpty()) {
-            throw new RuntimeException("Invalid username or password");
+            throw new AuthenticationException("Invalid username or password");
         }
 
         User user = optionalUser.get();

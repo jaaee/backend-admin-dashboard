@@ -1,5 +1,6 @@
 package com.example.admin_dashboard.dto.response;
 
+import com.example.admin_dashboard.annotation.LogMasked;
 import com.example.admin_dashboard.enums.Currency;
 import com.example.admin_dashboard.enums.RiskLevel;
 import com.example.admin_dashboard.enums.TransactionStatus;
@@ -13,6 +14,7 @@ public class TransactionResponse {
 
     private Long id;
     private String referenceNo;
+    @LogMasked
     private String customerName;
     private Double amount;
     private TransactionStatus status;

@@ -4,6 +4,7 @@ import com.example.admin_dashboard.dto.request.LoginRequest;
 import com.example.admin_dashboard.dto.response.LoginResponse;
 import com.example.admin_dashboard.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,9 +16,12 @@ public class AuthController {
     UserService userService;
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
 
-        return userService.login(request);
+        return ResponseEntity.ok(
+                userService.login(request)
+        );
+
     }
 
 //    // Send OTP
