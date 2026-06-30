@@ -14,6 +14,15 @@ public class LogSanitizer {
             return null;
         }
 
+        if (object instanceof String ||
+                object instanceof Number ||
+                object instanceof Boolean ||
+                object instanceof Character ||
+                object instanceof Long ||
+                object instanceof Enum<?>) {
+            return object;
+        }
+
         if (object instanceof Collection<?> collection) {
 
             return collection.stream()

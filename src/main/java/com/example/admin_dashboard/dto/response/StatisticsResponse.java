@@ -22,5 +22,5 @@ public class StatisticsResponse {
     private Long value;
     private String change;
     private Boolean isIncrease;
-    private List<Integer> chartData;
+    private List<Long> chartData;
 }

@@ -10,4 +10,6 @@ public interface StatisticsService {
      List<StatisticsResponse> getDashboardStatistics();
      List<RiskAnalysisResponse> getRiskAnalysis();
      LiveCounterResponse getLiveCounters();
+     List<Long> totalTransactionTrend();
+     List<Long> highRisktransactionTrend();
 }

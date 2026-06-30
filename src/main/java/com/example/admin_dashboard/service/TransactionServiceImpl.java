@@ -11,6 +11,8 @@ import com.example.admin_dashboard.mapper.TransactionMapper;
 import com.example.admin_dashboard.model.Transaction;
 import com.example.admin_dashboard.projection.ChannelBreakdownProjection;
 import com.example.admin_dashboard.projection.RiskAnalysisProjection;
+import com.example.admin_dashboard.projection.TransactionMetricsProjection;
+import com.example.admin_dashboard.projection.TransactionTrendProjection;
 import com.example.admin_dashboard.repository.TransactionRepository;
 import com.example.admin_dashboard.specification.TransactionFilterSpecification;
 import org.apache.poi.ss.usermodel.Row;
@@ -48,12 +50,38 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
 
-    public List<TransactionResponse> getRecentTransactions() {
+    public PagedResponse<TransactionResponse> getRecentTransactions(int page, int size) {
 
-        return transactionRepository.findTop10ByOrderByCreatedAtDesc()
-                .stream()
-                .map(transactionMapper::toResponse)
-                .toList();
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by("createdAt").descending()
+        );
+
+        Page<Transaction> transactionPage =
+                transactionRepository.findAll(
+                        pageable
+                );
+
+        List<TransactionResponse> transactions =
+                transactionPage.getContent()
+                        .stream()
+                        .map(transactionMapper::toResponse)
+                        .toList();
+
+        return PagedResponse.<TransactionResponse>builder()
+                .content(transactions)
+                .pageNumber(transactionPage.getNumber())
+                .pageSize(transactionPage.getSize())
+                .totalElements(transactionPage.getTotalElements())
+                .totalPages(transactionPage.getTotalPages())
+                .last(transactionPage.isLast())
+                .build();
+
+//        return transactionRepository.findTop10ByOrderByCreatedAtDesc()
+//                .stream()
+//                .map(transactionMapper::toResponse)
+//                .toList();
     }
 
     public List<ChannelBreakdownResponse> getChannelBreakdown() {
@@ -113,6 +141,15 @@ public class TransactionServiceImpl implements TransactionService{
 
 
     @Override
+    public TransactionMetricsProjection getChangeInTransactions(){
+        return transactionRepository.getChangeInTransactions();
+    }
+
+    @Override
+    public List<TransactionTrendProjection>getTransactionTrends(){
+        return transactionRepository.getTransactionTrends();
+    }
+    @Override
     public List<RiskAnalysisProjection> getRiskAnalysis() {
         return transactionRepository.getRiskAnalysis();
     }
@@ -135,7 +172,7 @@ public class TransactionServiceImpl implements TransactionService{
         Page<Transaction> transactionPage =
                 transactionRepository.findAll(
 
-                        TransactionFilterSpecification.filter(
+                    TransactionFilterSpecification.filter(
                                 request.getSearchKeyword(),
                                 request.getStatus(),
                                 request.getType(),

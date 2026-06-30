@@ -6,6 +6,7 @@ import com.example.admin_dashboard.dto.response.PagedResponse;
 import com.example.admin_dashboard.dto.response.TransactionResponse;
 import com.example.admin_dashboard.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,11 +27,12 @@ public class TransactionController {
         return transactionService.getAllTransactions();    }
 
     @GetMapping("/recent")
-    public ResponseEntity<List<TransactionResponse>>
-    getRecentTransactions() {
+    public ResponseEntity<PagedResponse<TransactionResponse>>
+    getRecentTransactions(@RequestParam(defaultValue = "0") int page,
+                          @RequestParam(defaultValue = "10") int size) {
 
         return ResponseEntity.ok(
-                transactionService.getRecentTransactions()
+                transactionService.getRecentTransactions(page,size)
         );
     }
 

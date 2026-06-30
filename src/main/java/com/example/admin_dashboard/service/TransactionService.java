@@ -6,13 +6,15 @@ import com.example.admin_dashboard.dto.response.PagedResponse;
 import com.example.admin_dashboard.dto.response.TransactionResponse;
 
 import com.example.admin_dashboard.projection.RiskAnalysisProjection;
+import com.example.admin_dashboard.projection.TransactionMetricsProjection;
+import com.example.admin_dashboard.projection.TransactionTrendProjection;
 
 
 import java.util.List;
 
 public interface TransactionService {
      List<TransactionResponse> getAllTransactions();
-     List<TransactionResponse> getRecentTransactions();
+    PagedResponse<TransactionResponse>getRecentTransactions(int page,int size);
      List<ChannelBreakdownResponse> getChannelBreakdown() ;
      long getTotalTransactions();
 
@@ -34,5 +36,7 @@ public interface TransactionService {
 
      long getTransactionsPerSecond();
      long getPendingTransactionsCount();
+    TransactionMetricsProjection getChangeInTransactions();
+    List<TransactionTrendProjection> getTransactionTrends();
 }
 

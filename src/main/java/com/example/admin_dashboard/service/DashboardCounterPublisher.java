@@ -15,7 +15,7 @@ public class DashboardCounterPublisher {
     private final SimpMessagingTemplate messagingTemplate;
     private final StatisticsService statisticsService;
 
-    @Scheduled(fixedRate = 1000000)
+    @Scheduled(fixedRate = 100000000)
     public void publishLiveCounters() {
 
 

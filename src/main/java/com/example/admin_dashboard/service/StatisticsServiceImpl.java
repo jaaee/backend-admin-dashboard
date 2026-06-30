@@ -7,11 +7,16 @@ import com.example.admin_dashboard.enums.StatisticsType;
 import com.example.admin_dashboard.mapper.LiveCounterMapper;
 import com.example.admin_dashboard.mapper.RiskAnalysisMapper;
 import com.example.admin_dashboard.mapper.StatisticsMapper;
+import com.example.admin_dashboard.projection.TransactionMetricsProjection;
+import com.example.admin_dashboard.projection.TransactionTrendProjection;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Service
 public class StatisticsServiceImpl implements  StatisticsService {
     @Autowired
@@ -50,27 +55,52 @@ public class StatisticsServiceImpl implements  StatisticsService {
         long highRiskTransactions =
                 transactionService.getHighRiskTransactions();
 
+        TransactionMetricsProjection changeInTransactions =
+                transactionService.getChangeInTransactions();
+
+        List<TransactionTrendProjection> transactionTrends =
+                transactionService.getTransactionTrends();
+
+        List<Long> totalTransactionsTrend = transactionTrends.stream()
+                .map(TransactionTrendProjection::getTotalTransactions)
+                .toList();
+
+        List<Long> totalPendingTrend = transactionTrends.stream()
+                .map(TransactionTrendProjection::getTotalPending)
+                .toList();
+
+        List<Long> totalSuccessTrend = transactionTrends.stream()
+                .map(TransactionTrendProjection::getTotalSuccess)
+                .toList();
+
+        List<Long> totalFailedTrend = transactionTrends.stream()
+                .map(TransactionTrendProjection::getTotalFailed)
+                .toList();
+
+        List<Long> totalHighRiskTrend = transactionTrends.stream()
+                .map(TransactionTrendProjection::getTotalHighRisk)
+                .toList();
 
         return List.of(
                 statisticsMapper.toResponse(
                         StatisticsType.TOTAL_TRANSACTIONS,
-                        totalTransactions),
+                        totalTransactions,changeInTransactions.getTotalChangePct(),totalTransactionsTrend),
 
                 statisticsMapper.toResponse(
                         StatisticsType.PENDING_TRANSACTIONS,
-                        pendingTransactions),
+                        pendingTransactions,changeInTransactions.getPendingChangePct(),totalPendingTrend),
 
                 statisticsMapper.toResponse(
 StatisticsType.SUCCESSFUL_TRANSACTIONS,
-                        successfulTransactions),
+                        successfulTransactions,changeInTransactions.getSuccessChangePct(),totalSuccessTrend),
 
                 statisticsMapper.toResponse(
                         StatisticsType.FAILED_TRANSACTIONS,
-                        failedTransactions),
+                        failedTransactions,changeInTransactions.getFailedChangePct(),totalFailedTrend),
 
                 statisticsMapper.toResponse(
 StatisticsType.HIGH_RISK_TRANSACTIONS,
-                        highRiskTransactions)
+                        highRiskTransactions,changeInTransactions.getHighRiskChangePct(),totalHighRiskTrend)
         );
 
 //        return statisticsMapper.toResponse(
@@ -143,4 +173,34 @@ StatisticsType.HIGH_RISK_TRANSACTIONS,
             fraudAlerts
     );
 }
+
+@Override
+public  List<Long> totalTransactionTrend(){
+
+    List<TransactionTrendProjection> transactionTrends =
+            transactionService.getTransactionTrends();
+
+    List<Long> totalTransactionsTrend = transactionTrends.stream()
+            .map(TransactionTrendProjection::getTotalTransactions)
+            .toList();
+
+    return totalTransactionsTrend;
+}
+
+
+   public  List<Long> highRisktransactionTrend(){
+
+        List<TransactionTrendProjection> transactionTrends =
+                transactionService.getTransactionTrends();
+
+        List<Long> highRisktransactionTrend = transactionTrends.stream()
+                .map(TransactionTrendProjection::getTotalHighRisk)
+                .toList();
+
+        return highRisktransactionTrend;
+
+    }
+
+
+
 }

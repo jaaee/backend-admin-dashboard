@@ -37,4 +37,22 @@ public class StatisticsController {
                 statisticsService.getLiveCounters()
         );
     }
+
+    @GetMapping("/totalTransactionTrend")
+    public
+    ResponseEntity<List<Long>> totalTransactionTrend() {
+
+        return ResponseEntity.ok(
+                statisticsService.totalTransactionTrend()
+        );
+    }
+
+    @GetMapping("/highRisktransactionTrend")
+    public
+    ResponseEntity<List<Long>> highRisktransactionTrend() {
+
+        return ResponseEntity.ok(
+                statisticsService.highRisktransactionTrend()
+        );
+    }
 }
